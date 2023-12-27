@@ -1,0 +1,54 @@
+body {
+    background-color: black;
+}
+
+#map {
+    width: 90vw;
+    height: 90vh;
+    transform: translate(1%, 1%);
+}
+
+#dialog {
+    position: absolute;
+    width: 30vw;
+    height: 90vh;
+    top: 0%;
+    left: 100%;
+    transform: translate(-100%, 0%);
+    background-color: black;
+    padding: 12px;
+    color: white;
+}
+
+#dialog p {
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#dialog h1 {
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#myfooter {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    margin: 10px;
+}
+
+button {
+    color: white;
+    background-color: black; 
+    border: 2px white solid;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+button:hover{
+    cursor: pointer;
+}

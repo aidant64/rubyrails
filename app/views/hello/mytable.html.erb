@@ -1,0 +1,97 @@
+<%
+
+require 'net/http'
+
+def compass_heading(degrees)
+  directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+  degrees %= 360
+  index = (degrees / (360.0 / directions.length)).round % directions.length
+  directions[index]
+end
+
+first_parameter = @loc
+
+response = Net::HTTP.get(URI("https://www.ndbc.noaa.gov/data/realtime2/#{first_parameter}.txt"))
+lines = response.split("\n")
+
+wind = -1
+gust = -1
+windDir = -1
+waveHeight = -1 
+waveAvePeriod = -1
+waveDir = -1
+
+first_line = lines[2].split.reject(&:empty?)
+day = first_line[2].to_i
+hour = first_line[3].to_i - 8
+if hour.negative?
+  hour += 24
+  day -= 1
+end
+time = "#{first_line[1]}/#{day}/#{first_line[0]} #{hour}:#{first_line[4]} PST"
+
+max_range = [30, lines.length].min
+(2...lines.length).each do |i|
+  line = lines[i].split.reject(&:empty?)
+
+  windDir = line[5] unless line[5] == 'MM'
+  wind = line[6] unless line[6] == 'MM'
+  gust = line[7] unless line[7] == 'MM'
+  waveHeight = line[8] unless line[8] == 'MM'
+  waveAvePeriod = line[9] unless line[9] == 'MM'
+  waveDir = line[11] unless line[11] == 'MM'
+
+end
+
+data = {
+  'lastUpdate': time,
+  'windSpeed': wind != -1 ? "#{(wind.to_f * 1.94384).round(1)} kts" : '--',
+  'windGust': gust != -1 ? "#{(gust.to_f * 1.94384).round(1)} kts" : '--',
+  'windDir': windDir != -1 ? "#{compass_heading(windDir.to_f)} #{windDir}\u00b0T" : '--',
+  'waveHeight': waveHeight != -1 ? "#{(waveHeight.to_f * 3.28084).round(1)} ft" : '--',
+  'waveDir': waveDir != -1 ? "#{compass_heading(waveDir.to_f)} #{waveDir}\u00b0T" : '--',
+  'wavePeriod': waveAvePeriod != -1 ? "#{waveAvePeriod} sec" : '--'
+}
+
+
+%>
+
+<style>
+  td {
+    border: 1px solid white;
+    padding: 8px;
+  }
+</style>
+
+<table style="border-collapse: collapse; border: 1px solid white; padding: 3px;">
+  <tbody>
+    <tr>
+      <td>Swell</td>
+      <td><%= data[:waveHeight] %></td>
+    </tr>
+    <tr>
+      <td>Swell period</td>
+      <td><%= data[:wavePeriod] %></td>
+    </tr>
+    <tr>
+      <td>Swell Direction</td>
+      <td><%= data[:waveDir] %></td>
+    </tr>
+    <tr>
+      <td>Wind</td>
+      <td><%= data[:windSpeed] %></td>
+    </tr>
+    <tr>
+      <td>Gust</td>
+      <td><%= data[:windGust] %></td>
+    </tr>
+    <tr>
+      <td>Wind Direction</td>
+      <td><%= data[:windDir] %></td>
+    </tr>
+    <tr>
+      <td>Last Update</td>
+      <td colspan='2'><%= data[:lastUpdate] %></td>
+    </tr>
+  </tbody>
+</table>
