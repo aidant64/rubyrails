@@ -1,24 +1,44 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## on server
+pre compile assets:
+rake assets:precompile
 
-* Ruby version
+run passenger:
+passenger start --port 3000 --daemonize
 
-* System dependencies
 
-* Configuration
+## on localhost
 
-* Database creation
+ruby
 
-* Database initialization
+sudo apt-get install ruby-full
+sudo apt install libyaml-dev
+sudo apt install -y nodejs
+gem install rails
+rails new hello_world
+bin/rails server
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+maybe:
+ sudo apt install -y git curl libssl-dev libreadline-dev zlib1g-dev
+ 
+ 
+ reverse proxy:
+ 
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo systemctl restart apache2
 
-* Deployment instructions
+for /etc/apache2/sites-enabled/...
 
-* ...
+    # ProxyPass configuration for Ruby on Rails
+    ProxyPass /ruby http://localhost:3000
+    ProxyPassReverse /ruby http://localhost:3000
+
+    <Proxy *>
+        Require all granted
+    </Proxy>
+
+sudo systemctl restart apache2
