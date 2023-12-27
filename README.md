@@ -42,3 +42,15 @@ for /etc/apache2/sites-enabled/...
     </Proxy>
 
 sudo systemctl restart apache2
+
+
+
+ON SERVER
+```bash
+sudo rm config/credentials.yml.enc 
+VISUAL="vi --wait" bin/rails credentials:edit
+RAILS_ENV=production rails assets:precompile
+export RAILS_ENV=production
+rails server #TEST: should say starting in production on second line after Booting Puma (just a test)
+passenger start --port 3000 --daemonize -e production
+```
