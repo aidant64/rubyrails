@@ -6,7 +6,7 @@ pre compile assets:
 rake assets:precompile
 
 run passenger:
-passenger start --port 3000 --daemonize
+passenger start --port 3000 --daemonize -e production
 
 
 ## on localhost
