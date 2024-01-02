@@ -51,6 +51,8 @@ sudo systemctl restart apache2
 
 ON SERVER
 ```bash
+git clone ...this...
+passenger stop
 sudo rm config/credentials.yml.enc 
 VISUAL="vi --wait" bin/rails credentials:edit
 RAILS_ENV=production rails assets:precompile
