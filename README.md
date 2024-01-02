@@ -18,6 +18,7 @@ sudo apt install libyaml-dev
 sudo apt install -y nodejs
 gem install rails
 rails new hello_world
+bin/bundle install
 bin/rails server
 ```
 
