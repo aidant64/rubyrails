@@ -34,12 +34,29 @@ max_range = [30, lines.length].min
 (2...lines.length).each do |i|
   line = lines[i].split.reject(&:empty?)
 
-  windDir = line[5] unless line[5] == 'MM'
-  wind = line[6] unless line[6] == 'MM'
-  gust = line[7] unless line[7] == 'MM'
-  waveHeight = line[8] unless line[8] == 'MM'
-  waveAvePeriod = line[9] unless line[9] == 'MM'
-  waveDir = line[11] unless line[11] == 'MM'
+  if line[5] != 'MM' && windDir == -1
+    windDir = line[5]
+  end
+
+  if line[6] != 'MM' && wind == -1
+    wind = line[6]
+  end
+
+  if line[7] != 'MM' && gust == -1
+    gust = line[7]
+  end
+  
+  if line[8] != 'MM' && waveHeight == -1
+    waveHeight = line[8]
+  end
+
+  if line[9] != 'MM' && waveAvePeriod == -1
+    waveAvePeriod = line[9]
+  end
+
+  if line[11] != 'MM' && waveDir == -1
+    waveDir = line[11]
+  end
 
 end
 
