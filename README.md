@@ -51,7 +51,7 @@ sudo systemctl restart apache2
 
 ON SERVER
 ```bash
-git clone ...this...
+git clone https://github.com/aidant64/rubyrails.git
 passenger stop
 sudo rm config/credentials.yml.enc 
 VISUAL="vi --wait" bin/rails credentials:edit
